@@ -1,9 +1,9 @@
 import pandas as pd
 
 def extract_dummy_data(path):
-    df = pd.read_csv(path+"masterTable1_.csv")
-    df_data1 = pd.read_csv(path+"masterTable1_data1.csv", index_col= "ts")
-    df_data2 = pd.read_csv(path+"masterTable1_data2.csv", index_col="ts")
+    df = pd.read_csv(path+"/masterTable1_.csv")
+    df_data1 = pd.read_csv(path+"/masterTable1_data1.csv", index_col= "ts")
+    df_data2 = pd.read_csv(path+"/masterTable1_data2.csv", index_col="ts")
     df_data = pd.DataFrame({"data":[df_data1, df_data2] })  
     df.loc[:, "data"] = df_data
 
