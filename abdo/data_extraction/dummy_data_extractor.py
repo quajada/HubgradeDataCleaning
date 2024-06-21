@@ -2,8 +2,8 @@ import pandas as pd
 
 def extract_dummy_data(path):
     df = pd.read_csv(path+"/masterTable1_.csv")
-    df_data1 = pd.read_csv(path+"/masterTable1_data1.csv", index_col= "ts")
-    df_data2 = pd.read_csv(path+"/masterTable1_data2.csv", index_col="ts")
+    df_data1 = pd.read_csv(path+"/masterTable1_data1.csv")#, index_col= "ts")   ### For the conversion from a grid to DataFrame in SS using the .to_dataframe() method, the behaviour of the method is NOT SETTING THE "TimeStamp" AS INDEX. Therefore setting ts as index has to be done in the model functions as preprocessing (note: converting the his grid to DataFrame in the extractData() function causes compatibility issues in SS -- returns this in SS=> val Number �. Therefore the .to_dataframe() method has to be applied in the model functions)
+    df_data2 = pd.read_csv(path+"/masterTable1_data2.csv")#, index_col= "ts")
     df_data = pd.DataFrame({"data":[df_data1, df_data2] })  
     df.loc[:, "data"] = df_data
 
@@ -19,5 +19,10 @@ def extract_dummy_data(path):
         pythonDF.loc[i, 'features'] =  df['featId'].iloc[i]
 
     pythonDF.loc[:, 'his'] =  df['data']
+
+    ## Cleaning any units or special characters from all features except the ts column. This is done AUTOMATICALLY on SS when using the .to_dataframe() function
+    for i in range(len(pythonDF['his'])):
+        for col in pythonDF["his"].iloc[i].columns[1:]:
+            pythonDF["his"].iloc[i][col] = pythonDF["his"].iloc[i][col].astype(str).str.replace(r'[^\d.]', '', regex=True)   ## \d => all digits   ///  .  => dots    /////  [^  ]  => keep charachters that are mentioned in the brackets
 
     return pythonDF
