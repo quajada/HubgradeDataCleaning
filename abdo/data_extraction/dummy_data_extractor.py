@@ -21,8 +21,10 @@ def extract_dummy_data(path):
     pythonDF.loc[:, 'his'] =  df['data']
 
     ## Cleaning any units or special characters from all features except the ts column. This is done AUTOMATICALLY on SS when using the .to_dataframe() function
+    ## Converting to float, this is also done automatically on SS from the .to_dataframe() function
     for i in range(len(pythonDF['his'])):
         for col in pythonDF["his"].iloc[i].columns[1:]:
             pythonDF["his"].iloc[i][col] = pythonDF["his"].iloc[i][col].astype(str).str.replace(r'[^\d.]', '', regex=True)   ## \d => all digits   ///  .  => dots    /////  [^  ]  => keep charachters that are mentioned in the brackets
-
+            pythonDF["his"].iloc[i][col] = pythonDF["his"].iloc[i][col].replace('', 'NaN').astype(float)    
+            
     return pythonDF
