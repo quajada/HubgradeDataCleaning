@@ -258,29 +258,29 @@ def ensemble_model(python_master_table):
             test_data = df.iloc[-1*int(horizon):]
 
             # the prediction. USED ONLY TO EVALUATE RMSE
-            seasonal_naive_predictions_for_rmse = model(df = train_data, length_of_missing_data = length_of_missing_data, data_logging_interval = data_logging_interval)
-            rmse_score = mean_squared_error(test_data[test_data.columns[0]].to_numpy(), seasonal_naive_predictions_for_rmse[seasonal_naive_predictions_for_rmse.columns[0]].to_numpy(), squared=False)
+            predictions_for_rmse = model(df = train_data, length_of_missing_data = length_of_missing_data, data_logging_interval = data_logging_interval)
+            rmse_score = mean_squared_error(test_data[test_data.columns[0]].to_numpy(), predictions_for_rmse[predictions_for_rmse.columns[0]].to_numpy(), squared=False)
 
             #------------------
             # ** Predictions **
             #------------------
 
             # the predictions. USED FOR DATA CLEANING (uses all the data as training)
-            seasonal_naive_predictions = model(df, length_of_missing_data, data_logging_interval)
+            predictions_for_data_quality = model(df, length_of_missing_data, data_logging_interval)
 
             # keep only timestamps for null periods (rows where there are null values on SS)
             start = row['dqStart']
             duration = row['dqDuration']
             interval = row['pointInterval']
-            timestamps = pd.date_range(start=start, end=start + duration, freq=interval)[1:-1] # clipping the first and last timestamps, as they already exist with actual data on SS
+            timestamps = pd.date_range(start=start, end=start+duration, freq=interval)[1:-1] # clipping the first and last timestamps, as they already exist with actual data on SS
 
-            seasonal_naive_predictions = seasonal_naive_predictions[seasonal_naive_predictions.index.isin(timestamps)]
+            predictions_for_data_quality = predictions_for_data_quality[predictions_for_data_quality.index.isin(timestamps)]
 
             # reset index to make the ts a column instead of index. SS doesnt show the index of a DF
-            seasonal_naive_predictions = seasonal_naive_predictions.reset_index()
+            predictions_for_data_quality = predictions_for_data_quality.reset_index()
 
             # append data to the scores DF
-            row_to_append = {'pointID': pointID, 'predictions': seasonal_naive_predictions, 
+            row_to_append = {'pointID': pointID, 'predictions': predictions_for_data_quality, 
                             "rmse": rmse_score, "modelName": model_name, 
                             "identifier": 
                                 str(row["pointID"])
