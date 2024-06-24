@@ -2,8 +2,8 @@ import pandas as pd
 
 def extract_dummy_data(path):
     df = pd.read_csv(path+"/masterTable1_.csv")
-    df_data1 = pd.read_csv(path+"/masterTable1_data1.csv")#, index_col= "ts")   ### For the conversion from a grid to DataFrame in SS using the .to_dataframe() method, the behaviour of the method is NOT SETTING THE "TimeStamp" AS INDEX. Therefore setting ts as index has to be done in the model functions as preprocessing (note: converting the his grid to DataFrame in the extractData() function causes compatibility issues in SS -- returns this in SS=> val Number �. Therefore the .to_dataframe() method has to be applied in the model functions)
-    df_data2 = pd.read_csv(path+"/masterTable1_data2.csv")#, index_col= "ts")
+    df_data1 = pd.read_csv(path+"/masterTable1_data_1.csv", index_col=[0], date_format="%Y-%m-%dT%H:%M:%S%z Dubai").reset_index()  
+    df_data2 = pd.read_csv(path+"/masterTable1_data_2.csv", index_col=[0], date_format="%Y-%m-%dT%H:%M:%S%z Dubai").reset_index()
     df_data = pd.DataFrame({"data":[df_data1, df_data2] })  
     df.loc[:, "data"] = df_data
 
