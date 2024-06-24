@@ -273,7 +273,7 @@ def ensemble_model(python_master_table):
             row_to_append = {'pointID': pointID, 'predictions': seasonal_naive_predictions, 
                             "rmse": rmse_score, "modelName": model_name, 
                             "identifier": 
-                                row["pointID"]
+                                str(row["pointID"])
                                 +str(row["dqStart"])
                                 +str(row["dqDuration"])
                                 +str(row["dqType"])}
