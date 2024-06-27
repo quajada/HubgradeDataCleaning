@@ -1,6 +1,6 @@
 import pandas as pd
 
-def polynomial_regression(df, dqStart):
+def polynomial_regression(df, length_of_missing_data, data_logging_interval, dqStart):
 
     """
     Inputs
@@ -12,8 +12,6 @@ def polynomial_regression(df, dqStart):
     """
 
     # step 1 convert the grid to a dataframe, set first column as index and drop all NaN
-    df = df.to_dataframe()
-    df.set_index(df.columns[0], inplace=True, drop=True)
     df = df.dropna()
 
     # Splitting variables
@@ -22,8 +20,8 @@ def polynomial_regression(df, dqStart):
 
     # Filter data for training and testing
     X_train = X[X.index < dqStart]
-    X_test = X[X.index >= dqStart]
     y_train = y[X.index < dqStart]
+    X_test = X[X.index >= dqStart]
     #y_test = y[X.index >= dqStart]
 
     # Generate polynomial features
@@ -37,4 +35,7 @@ def polynomial_regression(df, dqStart):
 
     y_pred = model.predict(X_test_poly)
 
-    return y_pred
+    # Create a new DataFrame with the timestamp as index and y_pred as values
+    pred_df = pd.DataFrame(data=y_pred, index=X_test.index, columns=['y_pred'])
+
+    return pred_df
