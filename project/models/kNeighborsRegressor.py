@@ -1,9 +1,8 @@
-from project.data_extraction.dummy_data_extractor import extract_dummy_data
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsRegressor
 import pandas as pd
 
-def iterative_Imputation(master_table):
+def kNeighbors_Regressor(master_table):
     """
     Input
     master_table: main table received from SS
