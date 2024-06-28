@@ -1,7 +1,4 @@
 import pandas as pd
-from sklearn.preprocessing import PolynomialFeatures
-from sklearn.linear_model import LinearRegression
-
 
 def polynomial_regression(df, length_of_missing_data, data_logging_interval, dqStart):
 
