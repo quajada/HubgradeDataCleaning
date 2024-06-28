@@ -56,10 +56,10 @@ def random_Forest_Regressor(master_table):
     
     # Evaluating the model
     mse = mean_squared_error(y_test, predictions_test)
-    print(f'Mean Squared Error: {mse}')
+    # print(f'Mean Squared Error: {mse}')
     
     r2 = r2_score(y_test, predictions_test)
-    print(f'R-squared: {r2}')
+    # print(f'R-squared: {r2}')
 
     predict = regressor.predict(X_predict)
     df = pd.DataFrame(data=predict, index=X_predict.index, columns=['y_pred'])
