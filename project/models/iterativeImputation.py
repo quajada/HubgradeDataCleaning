@@ -15,6 +15,6 @@ def iterative_Imputation(master_table):
     imputer = IterativeImputer()
     imputed = imputer.fit_transform(mt)
     mt_imputed = pd.DataFrame(imputed, index=mt.index, columns=mt.columns)
-    mt_predict = mt_imputed[mt_imputed["status"]==1]
+    mt_predict = mt_imputed[mt_imputed["status"]==1].drop(["status"],axis=1)
     
     return mt_predict
