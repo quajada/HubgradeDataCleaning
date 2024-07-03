@@ -72,7 +72,7 @@ def extractData(data):
         
     return pythonDF
 
-def seasonal_naive(df, length_of_missing_data, data_logging_interval):
+def seasonal_naive(df, length_of_missing_data, data_logging_interval, dqStart):
     """
     Inputs
     df: df used for training set (from SS)
@@ -83,7 +83,7 @@ def seasonal_naive(df, length_of_missing_data, data_logging_interval):
     forecasts_df: dataframe with predictions for the period missing data. Index names as ts, values column named as "v0
     """
     
-
+    
     # step 1 convert the grid to a dataframe, and set first column as index     ### UNCOMMENT THIS ONLY IF RUNNING THE MODEL DIRECTLY ON SS. THIS IS DONE IN THE ENSEMBLE MODEL SO NO NEED TO HAVE THIS WHEN RUNNING THROUGH ENSEMBLE MODEL
     #df = df.to_dataframe()
     #df.set_index(df.columns[0], inplace=True, drop=True)
@@ -91,6 +91,9 @@ def seasonal_naive(df, length_of_missing_data, data_logging_interval):
     # rename the first column as "target"
     new_column_name = "target"
     df = df.rename(columns={df.columns[0]: new_column_name})
+
+    # keep only the history BEFORE the start of the data quality issue, since this is a statisitcal model not ML model
+    df = df[df.index < dqStart]
 
     # format the df to statsforecast format
     df = df.reset_index()
@@ -134,7 +137,7 @@ def seasonal_naive(df, length_of_missing_data, data_logging_interval):
 
     return forecasts_df
 
-def dynamic_optimized_theta(df, length_of_missing_data, data_logging_interval):
+def dynamic_optimized_theta(df, length_of_missing_data, data_logging_interval, dqStart):
     """
     Inputs
     df: df used for training set (from SS)
@@ -153,6 +156,9 @@ def dynamic_optimized_theta(df, length_of_missing_data, data_logging_interval):
     # rename the first column as "target"
     new_column_name = "target"
     df = df.rename(columns={df.columns[0]: new_column_name})
+
+    # keep only the history BEFORE the start of the data quality issue, since this is a statisitcal model not ML model
+    df = df[df.index < dqStart]
 
     # format the df to statsforecast format
     df = df.reset_index()
@@ -230,7 +236,7 @@ def ensemble_model(python_master_table):
         df.set_index(df.columns[0], inplace=True, drop=True)
         length_of_missing_data = row["dqDuration"]
         data_logging_interval = row["pointInterval"]
-
+        dqStart = row["dqStart"]
 
         #----------------------------
         # Dict of Data Quality Models                              ############# ADD NEW MODELS HERE 
@@ -258,7 +264,7 @@ def ensemble_model(python_master_table):
             test_data = df.iloc[-1*int(horizon):]
 
             # the prediction. USED ONLY TO EVALUATE RMSE
-            predictions_for_rmse = model(df = train_data, length_of_missing_data = length_of_missing_data, data_logging_interval = data_logging_interval)
+            predictions_for_rmse = model(train_data, length_of_missing_data, data_logging_interval, dqStart)
             rmse_score = mean_squared_error(test_data[test_data.columns[0]].to_numpy(), predictions_for_rmse[predictions_for_rmse.columns[0]].to_numpy(), squared=False)
 
             #------------------
@@ -266,7 +272,7 @@ def ensemble_model(python_master_table):
             #------------------
 
             # the predictions. USED FOR DATA CLEANING (uses all the data as training)
-            predictions_for_data_quality = model(df, length_of_missing_data, data_logging_interval)
+            predictions_for_data_quality = model(df, length_of_missing_data, data_logging_interval, dqStart)
 
             # keep only timestamps for null periods (rows where there are null values on SS)
             start = row['dqStart']
@@ -278,6 +284,9 @@ def ensemble_model(python_master_table):
 
             # reset index to make the ts a column instead of index. SS doesnt show the index of a DF
             predictions_for_data_quality = predictions_for_data_quality.reset_index()
+
+            # rename the ts and predictions column to "ts" and "predictions", to have similar naming for all ouutputs of models (makes it easier as well when using the dcInsert function on SS.)
+            predictions_for_data_quality.columns = ["ts", "predictions"]
 
             # append data to the scores DF
             row_to_append = {'pointID': pointID, 'predictions': predictions_for_data_quality, 
@@ -294,5 +303,5 @@ def ensemble_model(python_master_table):
             idx = scores_df.groupby('identifier')['rmse'].idxmin()
             scores_df = scores_df.loc[idx].reset_index(drop=True)
             
-    return scores_df    
+    return scores_df      
 
