@@ -2,7 +2,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsRegressor
 import pandas as pd
 
-def kNeighbors_Regressor_Uniform(master_table):
+def kNeighbors_Regressor_Uniform(df, length_of_missing_data, data_logging_interval, dqStart):
     """
     Input
     master_table: main table received from SS
@@ -10,8 +10,8 @@ def kNeighbors_Regressor_Uniform(master_table):
     Output
     df: dataframe with predictions for all rows with missing columns. Index names as ts
     """
-    master_table = master_table.at[0,"his"]
-    mt = master_table.set_index(["ts"])
+    df = df.at[0,"his"]
+    mt = df.set_index(["ts"])
 
     # Tag and filter rows with missing
     mt["status"] = mt.isna().any(axis=1)
