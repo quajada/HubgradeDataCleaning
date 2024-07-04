@@ -25,7 +25,6 @@ def polynomial_regression(df, length_of_missing_data, data_logging_interval, dqS
     X_train = X[X.index < dqStart]
     y_train = y[X.index < dqStart]
     X_test = X[X.index >= dqStart]
-    #y_test = y[X.index >= dqStart]
 
     # Generate polynomial features
     poly = PolynomialFeatures(degree = 4)
