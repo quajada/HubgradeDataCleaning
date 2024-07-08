@@ -203,6 +203,9 @@ def dynamic_optimized_theta(df, length_of_missing_data, data_logging_interval, d
 
     return forecasts_df
 
+
+def prphet_forecasting(df, length_of_missing_data, data_logging_interval, dqStart):
+
 def ensemble_model(python_master_table):
     """
     Function to run all models, and return the one with lowest RMSE.
