@@ -27,8 +27,4 @@ def extract_dummy_data(path):
             pythonDF["his"].iloc[i][col] = pythonDF["his"].iloc[i][col].astype(str).str.replace(r'[^\d.]', '', regex=True)   ## \d => all digits   ///  .  => dots    /////  [^  ]  => keep charachters that are mentioned in the brackets
             pythonDF["his"].iloc[i][col] = pythonDF["his"].iloc[i][col].replace('', 'NaN').astype(float)    
             
-<<<<<<< Updated upstream
     return pythonDF
-=======
-    return pythonDF
->>>>>>> Stashed changes
