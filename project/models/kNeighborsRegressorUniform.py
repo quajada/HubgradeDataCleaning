@@ -29,6 +29,4 @@ def kNeighbors_Regressor_Uniform(df, length_of_missing_data, data_logging_interv
     pred = knn_regressor.predict(X_test)
     predictions = pd.DataFrame(data=pred, index=X_test.index, columns=['y_pred'])
 
-    predictions
-    
-    return df
+    return predictions
