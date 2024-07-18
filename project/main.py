@@ -68,7 +68,7 @@ def extractData(data):
         pythonDF.loc[i, 'dqStart'] = ssData['ts'].iloc[i]
         pythonDF.loc[i, 'dqDuration'] = pd.Timedelta(ssData['dur'].iloc[i], "min")
         pythonDF.loc[i, 'pointInterval'] =  pd.Timedelta(ssData["freq"].iloc[i], "min" )
-        pythonDF.loc[i, 'features'] =  ssData['featId'].iloc[i]
+        # pythonDF.loc[i, 'features'] =  ssData['featId'].iloc[i]
         pythonDF.loc[i, 'his'] =  ssData['data'].iloc[i]#.to_dataframe()
         
     return pythonDF

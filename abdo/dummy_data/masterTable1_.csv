@@ -1,3 +1,2 @@
-id,ts,dur,freq,unit,dqType,method,featId,data
-@p:dmc_All:r:2ddf07d5-ef59ca94 DMC Building 1 Data Quality Tests Dup of AHU_04_B1 Return Air Temp,2023-03-12T01:05:00+04:00 Dubai,2109.9999999999995min,5min,°C,Nulls,Python,[p:dmc_All:r:2de337c0-72b69972],fan.haystack.GbGrid@db6cba5
-@p:dmc_All:r:2ddf07d5-ef59ca94 DMC Building 1 Data Quality Tests Dup of AHU_04_B1 Return Air Temp,2023-03-19T01:10:00+04:00 Dubai,1410min,5min,°C,Nulls,Python,[p:dmc_All:r:2de337c0-72b69972],fan.haystack.GbGrid@9894ecb
+id,ts,dur,freq,unit,dqType,data
+@p:dmc_All:r:2ddf07d5-ef59ca94 DMC Building 1 Data Quality Tests Dup of AHU_04_B1 Return Air Temp,2023-03-19T01:10:00+04:00 Dubai,1410min,5min,°C,Nulls,fan.haystack.GbGrid@626c2196
