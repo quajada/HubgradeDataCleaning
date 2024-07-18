@@ -27,4 +27,4 @@ def kNeighbors_Regressor_Uniform(df, length_of_missing_data, data_logging_interv
 
     predictions
     
-    return df
+    return predictions
