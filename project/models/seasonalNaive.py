@@ -10,17 +10,10 @@ def seasonal_naive(df, length_of_missing_data, data_logging_interval):
     Output
     forecasts_df: dataframe with predictions for the period missing data. Index names as ts, values column named as "v0
     """
-    
-<<<<<<< Updated upstream
 
     # step 1 convert the grid to a dataframe, and set first column as index     ### UNCOMMENT THIS ONLY IF RUNNING THE MODEL DIRECTLY ON SS. THIS IS DONE IN THE ENSEMBLE MODEL SO NO NEED TO HAVE THIS WHEN RUNNING THROUGH ENSEMBLE MODEL
     #df = df.to_dataframe()
     #df.set_index(df.columns[0], inplace=True, drop=True)
-=======
-    # step 1 convert the grid to a dataframe, and set first column as index
-    df = df.to_dataframe()
-    df.set_index(df.columns[0], inplace=True, drop=True)
->>>>>>> Stashed changes
 
     # rename the first column as "target"
     new_column_name = "target"
