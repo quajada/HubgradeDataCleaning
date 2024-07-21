@@ -12,9 +12,9 @@ def random_Forest_Regressor(df, length_of_missing_data, data_logging_interval, d
     X = df.iloc[:,1:-1]
     y = df.iloc[:,0:1]  
 
-    X_train = X[X.index <= dqStart]
+    X_train = X[X.index < dqStart]
     X_test = X[X.index >= dqStart]
-    y_train = y[y.index <= dqStart]
+    y_train = y[y.index < dqStart]
 
     # Fitting Random Forest Regression to the dataset
     regressor = RandomForestRegressor(n_estimators=10, random_state=0, oob_score=True)

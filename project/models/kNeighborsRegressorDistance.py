@@ -16,9 +16,9 @@ def kNeighbors_Regressor_Uniform(df, length_of_missing_data, data_logging_interv
     X = df.iloc[:,1:-1]
     y = df.iloc[:,0:1]  
 
-    X_train = X[X.index <= dqStart]
+    X_train = X[X.index < dqStart]
     X_test = X[X.index >= dqStart]
-    y_train = y[y.index <= dqStart]
+    y_train = y[y.index < dqStart]
 
     knn_regressor = KNeighborsRegressor(n_neighbors=3,weights="distance")
     knn_regressor.fit(X_train, y_train)
