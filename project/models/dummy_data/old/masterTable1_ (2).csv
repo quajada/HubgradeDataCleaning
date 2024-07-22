@@ -1,0 +1,2 @@
+id,ts,dur,freq,unit,dqType,data
+@p:dmc_All:r:2ddf07d5-ef59ca94 DMC Building 1 Data Quality Tests Dup of AHU_04_B1 Return Air Temp,2023-03-19T01:10:00+04:00 Dubai,1410min,5min,°C,Nulls,fan.haystack.GbGrid@626c2196
