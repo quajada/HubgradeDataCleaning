@@ -334,7 +334,7 @@ def ensemble_model(python_master_table, filter=True):
         data_before_gap = df.loc[:dqStart][:-1] # :-1 to not include the first ts with nulls, since df.loc[:dqStart] will include the first ts with NAN
         # doing a bfill and ffill to make sure there are no nulls in the training data. This step should be taken care of on SS by interpolating. This is done as a cautionary measure as nulls in the data will cause some models to fail
         data_before_gap.bfill(inplace=True)
-        data_before_gap.ffill(inplace=True)
+        # data_before_gap.ffill(inplace=True)
         train_data = data_before_gap.loc[:dqStart-length_of_missing_data][:-1]
         test_data = data_before_gap.loc[dqStart-length_of_missing_data:dqStart]
         # test_data timestamps used to slice the predictions_for_rmse df to have exact dimension as testing set. This prevents raising error due to mismatching lengths when using the rmse or mape functions
