@@ -403,7 +403,7 @@ def ensemble_model(python_master_table, filter=True):
             predictions_for_data_quality = predictions_for_data_quality.reset_index()
 
             # rename the ts and predictions column to "ts" and "predictions", to have similar naming for all ouutputs of models (makes it easier as well when using the dcInsert function on SS.)
-            predictions_for_data_quality.columns = ["ts", "predictions"]
+            predictions_for_data_quality.columns = ["ts", "val"]
 
             # append data to the scores DF
             row_to_append = {'pointID': pointID, 'predictions': predictions_for_data_quality, 
@@ -448,7 +448,7 @@ def ensemble_model(python_master_table, filter=True):
                 predictions_for_data_quality = predictions_for_data_quality.reset_index()
 
                 # rename the ts and predictions column to "ts" and "predictions", to have similar naming for all ouutputs of models (makes it easier as well when using the dcInsert function on SS.)
-                predictions_for_data_quality.columns = ["ts", "predictions"]
+                predictions_for_data_quality.columns = ["ts", "val"]
 
                 # append data to the scores DF
                 row_to_append = {'pointID': pointID, 'predictions': predictions_for_data_quality, 
@@ -491,7 +491,7 @@ def ensemble_model(python_master_table, filter=True):
                         predictions_for_data_quality = predictions_for_data_quality.reset_index()
 
                         # rename the ts and predictions column to "ts" and "predictions", to have similar naming for all ouutputs of models (makes it easier as well when using the dcInsert function on SS.)
-                        predictions_for_data_quality.columns = ["ts", "predictions"]
+                        predictions_for_data_quality.columns = ["ts", "val"]
 
                         # append data to the scores DF
                         row_to_append = {'pointID': pointID, 'predictions': predictions_for_data_quality, 
