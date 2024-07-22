@@ -5,42 +5,26 @@ import pandas as pd
 def kNeighbors_Regressor_Uniform(df, length_of_missing_data, data_logging_interval, dqStart):
     """
     Input
-    master_table: main table received from SS
+    df:data table from SS with the ts as index
+    dqStart: start datetime
 
     Output
-    df: dataframe with predictions for all rows with missing columns. Index names as ts
+    df: dataframe with predictions for all rows with missing data inclusive of the start date and end date. Index names as ts
+
+    #Distance: gives each data point weight by distance from the missing values
     """
-    df = df.at[0,"his"]
-    mt = df.set_index(["ts"])
+    X = df.iloc[:,1:-1]
+    y = df.iloc[:,0:1]  
 
-    # Tag and filter rows with missing
-    mt["status"] = mt.isna().any(axis=1)
-    mt_predict = mt[mt["status"]==1]
-    X_predict = mt_predict.iloc[:,0:1] 
+    X_train = X[X.index < dqStart]
+    X_test = X[X.index >= dqStart]
+    y_train = y[y.index < dqStart]
 
-    # Filtered master table
-    mt_train = mt.dropna()
-    mt_train
-
-    # Load the dataset
-    # X = mt.iloc[:,1:-1]  Enable for SS
-    # y = mt.iloc[:,0:1]   Enable for SS
-
-    y = mt_train.iloc[:,1:-1]    #Custom due to sample dataset
-    X = mt_train.iloc[:,0:1]     #Custom due to sample dataset
-
-    # Split the dataset into training and testing sets
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-    
-    # # Apply KNN regression
     knn_regressor = KNeighborsRegressor(n_neighbors=3,weights="distance")
     knn_regressor.fit(X_train, y_train)
-    predictions = knn_regressor.predict(X_test)
-    predictions
-    # Evaluate the model
-    print('Score:', knn_regressor.score(X_test, y_test))
+    pred = knn_regressor.predict(X_test)
+    predictions = pd.DataFrame(data=pred, index=X_test.index, columns=['y_pred'])
 
-    predict = knn_regressor.predict(X_predict)
-    df = pd.DataFrame(data=predict, index=X_predict.index, columns=['y_pred'])
+    predictions
     
-    return df
+    return predictions

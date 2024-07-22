@@ -1,6 +1,6 @@
 import pandas as pd
 
-def dynamic_optimized_theta(df, length_of_missing_data, data_logging_interval):
+def dynamic_optimized_theta(df, length_of_missing_data, data_logging_interval, dqStart):
     """
     Inputs
     df: df used for training set (from SS)
@@ -20,13 +20,16 @@ def dynamic_optimized_theta(df, length_of_missing_data, data_logging_interval):
     new_column_name = "target"
     df = df.rename(columns={df.columns[0]: new_column_name})
 
+    # keep only the history BEFORE the start of the data quality issue, since this is a statisitcal model not ML model
+    df = df[df.index < dqStart]
+
     # format the df to statsforecast format
     df = df.reset_index()
     df = df.rename(columns={df.columns[0]: 'ds', df.columns[1]: "y"})
     df['unique_id'] = "v0"    
 
     # number of predictions
-    horizon = int(length_of_missing_data/data_logging_interval) + 1 # why -1? because if you do length_of_missing_data/data_logging_interval you will get prediction length that is exclusive of the start ts (start ts is the last ts with actual data before the gap), and inclusive of the end ts (end ts is the first ts with actual data after the gap). +1 to get predictions also for the start and end timestamp. Can remove them later
+    horizon = int(length_of_missing_data/data_logging_interval) #+ 1 # why -1? because if you do length_of_missing_data/data_logging_interval you will get prediction length that is exclusive of the start ts (start ts is the last ts with actual data before the gap), and inclusive of the end ts (end ts is the first ts with actual data after the gap). +1 to get predictions also for the start and end timestamp. Can remove them later
 
     # season length
     season_length = int(pd.Timedelta(24, 'h') / data_logging_interval)      
@@ -56,7 +59,7 @@ def dynamic_optimized_theta(df, length_of_missing_data, data_logging_interval):
         if re.search("-hi-", col) or re.search("-lo-", col):
             forecasts_df.drop(col, axis=1, inplace=True)
             
-    forecasts_df = forecasts_df.rename(columns={"ds": "timestamp"})
+    forecasts_df = forecasts_df.rename(columns={"ds": "timestamp", "DynamicOptimizedTheta":"dynamicOptimizedTheta"})
 
     forecasts_df.set_index("timestamp", inplace=True)
 

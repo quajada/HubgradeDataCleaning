@@ -2,7 +2,7 @@ import pandas as pd
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.linear_model import LinearRegression
 
-def polynomial_regression(df, length_of_missing_data, data_logging_interval, dqStart):
+def polynomial_regression(df, length_of_missing_data, data_logging_interval, dqStart, featureNumber):
 
     """
     Inputs
@@ -14,11 +14,11 @@ def polynomial_regression(df, length_of_missing_data, data_logging_interval, dqS
     """
 
     # Drop all NaN
-    df = df.dropna()
+    # df = df.dropna()
 
     # Splitting variables
     y = df[df.columns[0]]  # independent variable
-    X = df[[df.columns[1]]]  # dependent variable
+    X = df[[df.columns[featureNumber+1]]]  # dependent variable
 
     # Filter data for training and testing
     X_train = X[X.index < dqStart]
