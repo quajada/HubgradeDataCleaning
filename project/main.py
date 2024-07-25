@@ -240,8 +240,8 @@ def random_Forest_Regressor(df, length_of_missing_data, data_logging_interval, d
     Output
     df: dataframe with predictions for all rows with missing columns. Index names as ts
     """
-    X = df.iloc[:,1:-1]
-    y = df.iloc[:,0:1]  
+    X = df[[df.columns[0]]]
+    y = df[df.columns[1:]]
 
     X_train = X[X.index < dqStart]
     X_test = X[X.index >= dqStart]
@@ -268,8 +268,8 @@ def kNeighbors_Regressor_Uniform(df, length_of_missing_data, data_logging_interv
 
     #Uniform: gives each data point equal weight
     """
-    X = df.iloc[:,1:-1]
-    y = df.iloc[:,0:1]  
+    X = df[[df.columns[0]]]
+    y = df[df.columns[1:]] 
 
     X_train = X[X.index < dqStart]
     X_test = X[X.index >= dqStart]
@@ -303,7 +303,8 @@ def ensemble_model(python_master_table, filter=True):
     "predictions": [],
     "rmse": [],
     "mape": [],
-    "modelName": []
+    "modelName": [],
+    "lengthOfMissingData": []
     }
     # Create a DataFrame from the dictionary
     scores_df = pd.DataFrame(scores_df_dict)
@@ -389,7 +390,6 @@ def ensemble_model(python_master_table, filter=True):
             rmse_score = mean_squared_error(test_data[test_data.columns[0]].to_numpy(), predictions_for_rmse[predictions_for_rmse.columns[0]].to_numpy(), squared=False)
             mape_score = mean_absolute_percentage_error(test_data[test_data.columns[0]].to_numpy(), predictions_for_rmse[predictions_for_rmse.columns[0]].to_numpy())
 
-
             #------------------
             # ** Predictions **
             #------------------
@@ -409,6 +409,7 @@ def ensemble_model(python_master_table, filter=True):
             row_to_append = {'pointID': pointID, 'predictions': predictions_for_data_quality, 
                                 "rmse": rmse_score, "mape": mape_score,
                                 "modelName": model_name, 
+                                "lengthOfMissingData": length_of_missing_data,
                                 "identifier": 
                                     str(row["pointID"])
                                     +str(row["dqStart"])
@@ -454,6 +455,7 @@ def ensemble_model(python_master_table, filter=True):
                 row_to_append = {'pointID': pointID, 'predictions': predictions_for_data_quality, 
                                 "rmse": rmse_score, "mape": mape_score,
                                 "modelName": model_name, 
+                                "lengthOfMissingData": length_of_missing_data,
                                 "identifier": 
                                     str(row["pointID"])
                                     +str(row["dqStart"])
@@ -496,7 +498,9 @@ def ensemble_model(python_master_table, filter=True):
                         # append data to the scores DF
                         row_to_append = {'pointID': pointID, 'predictions': predictions_for_data_quality, 
                                         "rmse": rmse_score, "mape": mape_score,
-                                        "modelName": model_name+" - Feature: " + str(featureName), 
+                                        "modelName": model_name,
+                                        "featureName": str(featureName), 
+                                        "lengthOfMissingData": length_of_missing_data,
                                         "identifier": 
                                             str(row["pointID"])
                                             +str(row["dqStart"])

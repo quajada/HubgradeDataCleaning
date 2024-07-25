@@ -9,8 +9,8 @@ def random_Forest_Regressor(df, length_of_missing_data, data_logging_interval, d
     Output
     df: dataframe with predictions for all rows with missing columns. Index names as ts
     """
-    X = df.iloc[:,1:-1]
-    y = df.iloc[:,0:1]  
+    X = df[[df.columns[0]]]
+    y = df[df.columns[1:]]
 
     X_train = X[X.index < dqStart]
     X_test = X[X.index >= dqStart]

@@ -17,8 +17,8 @@ def kNeighbors_Regressor_Uniform(df, length_of_missing_data, data_logging_interv
 
     #Uniform: gives each data point equal weight
     """
-    X = df.iloc[:,1:-1]
-    y = df.iloc[:,0:1]  
+    X = df[[df.columns[0]]]
+    y = df[df.columns[1:]]
 
     X_train = X[X.index < dqStart]
     X_test = X[X.index >= dqStart]
