@@ -340,6 +340,8 @@ def ensemble_model(python_master_table, filter=True):
         test_data = data_before_gap.loc[dqStart-length_of_missing_data:dqStart]
         # test_data timestamps used to slice the predictions_for_rmse df to have exact dimension as testing set. This prevents raising error due to mismatching lengths when using the rmse or mape functions
         test_data_timestamps = pd.date_range(start=test_data.index[0], end=test_data.index[-1], freq=test_data.index.freq)
+        
+        df.bfill(inplace=True)
 
 
         # ----------------------------
